@@ -37,7 +37,7 @@ switch ($_GET["action"] ?? "") {
         $params = SiweMessageParamsBuilder::create()
             ->withAddress($address)
             ->withChainId(1)
-            ->withNotBefore(time() + 100)
+            ->withNotBefore((new DateTime())->add(new DateInterval('PT5M')))
             // If nonce is not specified, it will be generated automatically.
             // ->withNonce(NonceManager::generate())
             ->withDomain($_SERVER["HTTP_HOST"])

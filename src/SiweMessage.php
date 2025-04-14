@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace Zbkm\Siwe;
 
+use Exception;
 use Zbkm\Siwe\Ethereum\Signature;
 use Zbkm\Siwe\Exception\SignatureException;
-use Zbkm\Siwe\Exception\SiweInvalidMessageFieldException;
 use Zbkm\Siwe\Exception\SiweTimeException;
 use Zbkm\Siwe\Utils\TimeFormatter;
 use Zbkm\Siwe\Validators\SiweMessageTimeValidator;
@@ -32,14 +32,14 @@ class SiweMessage
         $message .= "Version: " . $params->version . "\n";
         $message .= "Chain ID: " . $params->chainId . "\n";
         $message .= "Nonce: " . $params->nonce . "\n";
-        $message .= "Issued At: " . TimeFormatter::timestampToISO($params->issuedAt);
+        $message .= "Issued At: " . TimeFormatter::datetimeToISO($params->issuedAt);
 
         if ($params->expirationTime) {
-            $message .= "\nExpiration Time: " . TimeFormatter::timestampToISO($params->expirationTime);
+            $message .= "\nExpiration Time: " . TimeFormatter::datetimeToISO($params->expirationTime);
         }
 
         if ($params->notBefore) {
-            $message .= "\nNot Before: " . TimeFormatter::timestampToISO($params->notBefore);
+            $message .= "\nNot Before: " . TimeFormatter::datetimeToISO($params->notBefore);
         }
 
         if ($params->requestId) {
@@ -72,15 +72,15 @@ class SiweMessage
         $params = array_filter($params);
 
         if (array_key_exists("expirationTime", $params)) {
-            $params["expirationTime"] = TimeFormatter::ISOToTimestamp($params["expirationTime"]);
+            $params["expirationTime"] = TimeFormatter::ISOToDatetime($params["expirationTime"]);
         }
 
         if (array_key_exists("issuedAt", $params)) {
-            $params["issuedAt"] = TimeFormatter::ISOToTimestamp($params["issuedAt"]);
+            $params["issuedAt"] = TimeFormatter::ISOToDatetime($params["issuedAt"]);
         }
 
         if (array_key_exists("notBefore", $params)) {
-            $params["notBefore"] = TimeFormatter::ISOToTimestamp($params["notBefore"]);
+            $params["notBefore"] = TimeFormatter::ISOToDatetime($params["notBefore"]);
         }
 
         $resources = explode("Resources:\n", $message);
@@ -106,7 +106,7 @@ class SiweMessage
         try {
             self::verifyOrFail($params, self::create($params), $signature);
             return true;
-        } catch (\Exception) {
+        } catch (Exception) {
             return false;
         }
     }
@@ -123,7 +123,7 @@ class SiweMessage
         try {
             self::verifyOrFail(self::parse($message), $message, $signature);
             return true;
-        } catch (\Exception) {
+        } catch (Exception) {
             return false;
         }
     }

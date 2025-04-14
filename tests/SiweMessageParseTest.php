@@ -1,8 +1,8 @@
 <?php
 declare(strict_types=1);
 
-use Zbkm\Siwe\SiweMessage;
 use PHPUnit\Framework\TestCase;
+use Zbkm\Siwe\SiweMessage;
 use Zbkm\Siwe\SiweMessageParams;
 
 // tests from https://github.com/wevm/viem/blob/main/src/utils/siwe/parseSiweMessage.test.ts
@@ -26,7 +26,7 @@ Issued At: 2023-02-01T00:00:00.000Z";
             "address" => "0xA0Cf798816D4b9b9866b5330EEa46a18382f251e",
             "chainId" => 1,
             "domain" => "example.com",
-            "issuedAt" => strtotime("2023-02-01T00:00:00.000Z"),
+            "issuedAt" => new DateTime("2023-02-01T00:00:00.000Z"),
             "nonce" => "foobarbaz",
             "statement" => "I accept the ExampleOrg Terms of Service: https://example.com/tos",
             "uri" => "https://example.com/path",
@@ -82,7 +82,7 @@ Issued At: 2023-02-01T00:00:00.000Z
 Expiration Time: 2022-02-04T00:00:00.000Z";
 
         $this->assertEquals(
-            strtotime("2022-02-04T00:00:00.000Z"),
+            new DateTime("2022-02-04T00:00:00.000Z"),
             SiweMessage::parse($message)->expirationTime
         );
     }
@@ -100,7 +100,7 @@ Issued At: 2023-02-01T00:00:00.000Z
 Not Before: 2022-02-04T00:00:00.000Z";
 
         $this->assertEquals(
-            strtotime("2022-02-04T00:00:00.000Z"),
+            new DateTime("2022-02-04T00:00:00.000Z"),
             SiweMessage::parse($message)->notBefore
         );
     }
@@ -148,44 +148,24 @@ Resources:
         );
     }
 
-//    public function testParseNoSuffix()
-//    {
-//        $message = "https://example.com wants you to sign in with your Ethereum account:
-//0xA0Cf798816D4b9b9866b5330EEa46a18382f251e
-//
-//";
-//        $result = SiweMessageParams::fromArray([
-//            "address" => "0xA0Cf798816D4b9b9866b5330EEa46a18382f251e",
-//            "domain" => "example.com",
-//            "scheme" => "https"
-//        ]);
-//
-//        $this->assertEquals(
-//            $result,
-//            SiweMessage::parse($message)
-//        );
-//    }
-//
-//    public function testParseNoPrefix()
-//    {
-//        $message = "URI: https://example.com/path
-//Version: 1
-//Chain ID: 1
-//Nonce: foobarbaz
-//Issued At: 2023-02-01T00:00:00.000Z
-//Request ID: 123e4567-e89b-12d3-a456-426614174000";
-//        $result = SiweMessageParams::fromArray([
-//            "chainId" => 1,
-//            "issuedAt" => strtotime("2023-02-01T00:00:00.000Z"),
-//            "nonce" => "foobarbaz",
-//            "requestId" => "123e4567-e89b-12d3-a456-426614174000",
-//            "uri" => "https://example.com/path",
-//            "version" => "1",
-//        ]);
-//
-//        $this->assertEquals(
-//            $result,
-//            SiweMessage::parse($message)
-//        );
-//    }
+    public function testParseWithTimeMilliseconds()
+    {
+        $message = "https://example.com wants you to sign in with your Ethereum account:
+0xA0Cf798816D4b9b9866b5330EEa46a18382f251e
+
+URI: https://example.com/path
+Version: 1
+Chain ID: 1
+Nonce: foobarbaz
+Issued At: 2023-02-01T00:00:00.500Z";
+
+        $this->assertNotEquals(
+            new DateTime("2023-02-01T00:00:00.800Z"),
+            SiweMessage::parse($message)->issuedAt
+        );
+        $this->assertEquals(
+            new DateTime("2023-02-01T00:00:00.500Z"),
+            SiweMessage::parse($message)->issuedAt
+        );
+    }
 }

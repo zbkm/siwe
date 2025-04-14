@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Zbkm\Siwe\Validators;
 
+use DateTime;
+use DateTimeInterface;
 use Zbkm\Siwe\Exception\SiweTimeException;
 use Zbkm\Siwe\SiweMessageParams;
 
@@ -33,9 +35,9 @@ class SiweMessageTimeValidator
      * @param int $notBefore
      * @return bool
      */
-    public static function notBeforeValidate(int $notBefore): bool
+    public static function notBeforeValidate(DateTimeInterface $notBefore): bool
     {
-        return time() > $notBefore;
+        return date_diff(new DateTime(), $notBefore)->invert === 0;
     }
 
     /**
@@ -44,8 +46,8 @@ class SiweMessageTimeValidator
      * @param int $expirationTime
      * @return bool
      */
-    public static function expirationTimeValidate(int $expirationTime): bool
+    public static function expirationTimeValidate(DateTimeInterface $expirationTime): bool
     {
-        return $expirationTime > time();
+        return date_diff($expirationTime, new DateTime())->invert === 0;
     }
 }

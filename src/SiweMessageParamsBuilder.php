@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Zbkm\Siwe;
 
+use DateTimeInterface;
 use Zbkm\Siwe\Exception\SiweInvalidMessageFieldException;
 
 class SiweMessageParamsBuilder
@@ -11,9 +12,9 @@ class SiweMessageParamsBuilder
     protected int $chainId;
     protected string $domain;
     protected ?string $statement = null;
-    protected ?int $expirationTime = null;
-    protected ?int $issuedAt = null;
-    protected ?int $notBefore = null;
+    protected ?DateTimeInterface $expirationTime = null;
+    protected ?DateTimeInterface $issuedAt = null;
+    protected ?DateTimeInterface $notBefore = null;
     protected ?string $requestId = null;
     protected ?string $scheme = null;
     protected ?string $nonce = null;
@@ -74,30 +75,30 @@ class SiweMessageParamsBuilder
     }
 
     /**
-     * @param int $expirationTime The time when the signed authentication message is no longer valid
+     * @param DateTimeInterface $expirationTime The time when the signed authentication message is no longer valid
      * @return $this
      */
-    public function withExpirationTime(int $expirationTime): self
+    public function withExpirationTime(DateTimeInterface $expirationTime): self
     {
         $this->expirationTime = $expirationTime;
         return $this;
     }
 
     /**
-     * @param int $issuedAt The time when the message was generated, typically the current time
+     * @param DateTimeInterface $issuedAt The time when the message was generated, typically the current time
      * @return $this
      */
-    public function withIssuedAt(int $issuedAt): self
+    public function withIssuedAt(DateTimeInterface $issuedAt): self
     {
         $this->issuedAt = $issuedAt;
         return $this;
     }
 
     /**
-     * @param int $notBefore The time when the signed authentication message will become valid
+     * @param DateTimeInterface $notBefore The time when the signed authentication message will become valid
      * @return $this
      */
-    public function withNotBefore(int $notBefore): self
+    public function withNotBefore(DateTimeInterface $notBefore): self
     {
         $this->notBefore = $notBefore;
         return $this;

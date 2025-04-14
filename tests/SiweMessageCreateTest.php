@@ -18,6 +18,7 @@ class SiweMessageCreateTest extends TestCase
             ->withDomain('example.com')
             ->withNonce('foobarbaz')
             ->withUri('https://example.com/path')
+            ->withIssuedAt(new DateTime('2023-02-01T00:00:00.000Z'))
             ->withVersion('1');
     }
 
@@ -111,10 +112,7 @@ Issued At: 2023-02-01T00:00:00.000Z",
 
         $message = SiweMessage::create($this
             ->messageBuilder
-            ->withIssuedAt((new DateTime())
-                ->setDate(2022, 2, 1)
-                ->setTime(0, 0)
-                ->getTimestamp())
+            ->withIssuedAt((new DateTime())->setDate(2022, 2, 1)->setTime(0, 0))
             ->build());
         $this->assertSame("example.com wants you to sign in with your Ethereum account:
 0xA0Cf798816D4b9b9866b5330EEa46a18382f251e
@@ -132,10 +130,7 @@ Issued At: 2022-02-01T00:00:00.000Z",
     {
         $message = SiweMessage::create($this
             ->messageBuilder
-            ->withExpirationTime((new DateTime())
-                ->setDate(2022, 2, 4)
-                ->setTime(0, 0)
-                ->getTimestamp())
+            ->withExpirationTime((new DateTime())->setDate(2022, 2, 4)->setTime(0, 0))
             ->build());
         $this->assertSame("example.com wants you to sign in with your Ethereum account:
 0xA0Cf798816D4b9b9866b5330EEa46a18382f251e
@@ -154,10 +149,7 @@ Expiration Time: 2022-02-04T00:00:00.000Z",
     {
         $message = SiweMessage::create($this
             ->messageBuilder
-            ->withNotBefore((new DateTime())
-                ->setDate(2022, 2, 4)
-                ->setTime(0, 0)
-                ->getTimestamp())
+            ->withNotBefore((new DateTime())->setDate(2022, 2, 4)->setTime(0, 0))
             ->build());
 
         $this->assertSame("example.com wants you to sign in with your Ethereum account:

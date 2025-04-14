@@ -4,18 +4,17 @@ declare(strict_types=1);
 namespace Zbkm\Siwe\Utils;
 
 use DateTime;
+use DateTimeInterface;
 
 class TimeFormatter
 {
-    public static function timestampToISO(int $timestamp): string
+    public static function datetimeToISO(DateTimeInterface $datetime): string
     {
-        $date = new DateTime();
-        $date->setTimestamp($timestamp);
-        return $date->format('Y-m-d\TH:i:s.v\Z');
+        return $datetime->format('Y-m-d\TH:i:s.v\Z');
     }
 
-    public static function ISOToTimestamp(string $iso): int
+    public static function ISOToDatetime(string $iso): DateTime
     {
-        return strtotime($iso);
+        return DateTime::createFromFormat('Y-m-d\TH:i:s.v\Z', $iso);
     }
 }

@@ -13,9 +13,9 @@ class SiweMessageVerifyTest extends TestCase
             address: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
             chainId: 1,
             domain: "example.com",
-            issuedAt: strtotime("2023-01-31T19:00:00.000Z"),
-            nonce: "foobarbaz",
             uri: "https://example.com/path",
+            issuedAt: new DateTime("2023-01-31T19:00:00.000Z"),
+            nonce: "foobarbaz",
             version: "1"
         );
 
@@ -30,9 +30,9 @@ class SiweMessageVerifyTest extends TestCase
             address: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
             chainId: 1,
             domain: "viem.sh",
-            issuedAt: strtotime("2023-02-01T00:00:00.000Z"),
-            nonce: "foobarbaz",
             uri: "https://example.com/path",
+            issuedAt: new DateTime("2023-02-01T00:00:00.000Z"),
+            nonce: "foobarbaz",
             version: "1"
         );
 

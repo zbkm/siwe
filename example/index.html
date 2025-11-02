@@ -3,119 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <title>Ethereum Authentication for PHP Example</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        #web3-connect {
+            background-color: #4f46e5;
+            color: #fff;
+            font-weight: 500;
+            font-size: 14px;
+            padding: 10px 18px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        #logs pre {
+            padding: 6px 8px;
+            border-radius: 6px;
+            background: #111;
+            color: #ddd;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+        }
+    </style>
 </head>
 <body>
 
-<div id="user" style="display: none;">
-    <p>Your address from session: <span id="user-address"></span></p>
-    <button id="logout">Log out</button>
-</div>
-
-<div id="guest" style="display: none;">
+<div>
     <button id="web3-connect">Connect wallet</button>
 </div>
 
+<b>logs:</b>
+<div id="logs"></div>
+
 <script type="module">
-
-    // As a library for connecting a wallet you can use:
-    // - ConnectKit - https://docs.family.co/connectkit
-    // - Reown AppKit - https://reown.com/appkit
-    // - RainbowKit - https://www.rainbowkit.com/
-    // - Web3-Onboard - https://onboard.blocknative.com/
-
-    // !!! This code is provided as an example, it should not be used in production. Don't request dependencies this way.
-    import Onboard from "https://esm.sh/@web3-onboard/core@2.23.0";
-    import injectedModule from "https://esm.sh/@web3-onboard/injected-wallets@2.11.2";
-    import {ethers} from "https://cdnjs.cloudflare.com/ajax/libs/ethers/6.7.0/ethers.min.js";
-
-    const injected = injectedModule();
-    const onboard = Onboard({
-        wallets: [injected],
-        chains: [
-            {
-                id: "0x1",
-                token: "ETH",
-                label: "Ethereum Mainnet",
-                rpcUrl: "https://1rpc.io/eth"
-            }
-        ]
-    });
-
     const connectButton = document.getElementById("web3-connect");
-    const logoutButton = document.getElementById("logout");
-    const userSection = document.getElementById("user");
-    const guestSection = document.getElementById("guest");
-    const userAddressLabel = document.getElementById("user-address");
-
     connectButton.addEventListener("click", connectWallet);
-    logoutButton.addEventListener("click", logout);
-    getProfile();
-
 
     async function connectWallet() {
-        const [wallet] = await onboard.connectWallet();
-        if (wallet) {
-            // In case of using ethers, we create provider and signer objects, and also get the wallet address
-            const ethersProvider = new ethers.BrowserProvider(wallet.provider, "any");
-            const signer = await ethersProvider.getSigner();
-            const address = await signer.getAddress();
+        try {
+            // As an example, we interact directly with the provider via window.ethereum, but in a real project, you
+            // will likely want to get a connection modal with a wallet selection. It is worth considering reown,
+            // rainbow kit, or web3-onboard
+            if (!window.ethereum) throw new Error("No wallet found");
 
-            try {
-                // We receive a message for signing from API
-                const siweMessage = await getSIWEMessage(address);
-                // We sign it via sign_personal
-                const signature = await signer.signMessage(siweMessage);
-                // We send the signature back to the server
-                await authorize(signature);
-                await getProfile();
-            } catch (error) {
-                console.error(error.message);
-            }
+            // In a real project, it would be better not to interact with the provider directly, but to use
+            // viem or ethers for this purpose.
+            await window.ethereum.request({method: "eth_requestAccounts"});
+            const [address] = await window.ethereum.request({method: "eth_accounts"});
+
+            // In fact, it's a question of approach. In this case, we send the address to the server to receive a
+            // generated SIWE message from it. But another common option is to generate the message on the client
+            // side, receiving only the nonce from the server.
+            const siweMessage = (await sendRequest("/api.php?action=get_siwe_message", {address})).siwe_message;
+
+            // To sign an SIWE message, you must use personal_sign. In viem or ethers, this is also called signMessage.
+            const signature = await window.ethereum.request({
+                method: "personal_sign",
+                params: [siweMessage, address],
+            });
+
+            // and now we send the received signature to the server for verification
+            await sendRequest("/api.php?action=authorize", {signature});
+        } catch (e) {
+            addLog(e.message);
         }
     }
 
-    async function fetchJson(url, options = {}) {
+    async function sendRequest(url, body = {}) {
         const response = await fetch(url, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
-            ...options
+            // headers: { "Content-Type": "application/json" },
+            body: new URLSearchParams(body),
         });
-        return await response.json();
+        const parsedResponse = await response.json();
+        addLog({url, body, response: parsedResponse});
+
+        if (parsedResponse.status !== "success") throw new Error(parsedResponse.message);
+        return parsedResponse;
     }
 
-    async function getProfile() {
-        const profile = await fetchJson("/api.php?action=profile");
-        if (profile.status === "success") {
-            userAddressLabel.textContent = profile.profile.address;
-            toggleAuthState(true);
-        } else {
-            toggleAuthState(false);
-        }
-    }
-
-    async function logout() {
-        await fetchJson("/api.php?action=logout");
-        toggleAuthState(false);
-    }
-
-    async function getSIWEMessage(address) {
-        const { siwe_message, status, message } = await fetchJson("/api.php?action=get_siwe_message", {
-            body: JSON.stringify({ address })
-        });
-        if (status === "success") return siwe_message;
-        throw new Error(message || "Failed to get SIWE message");
-    }
-
-    async function authorize(signature) {
-        const { status, message } = await fetchJson("/api.php?action=authorize", {
-            body: JSON.stringify({ signature })
-        });
-        if (status !== "success") throw new Error(message || "Authorization failed");
-    }
-
-    function toggleAuthState(isAuthenticated) {
-        userSection.style.display = isAuthenticated ? "block" : "none";
-        guestSection.style.display = isAuthenticated ? "none" : "block";
+    function addLog(args) {
+        const el = document.getElementById("logs");
+        const pre = document.createElement("pre");
+        pre.textContent = JSON.stringify(args, null, 4);
+        el.prepend(pre);
     }
 </script>
 

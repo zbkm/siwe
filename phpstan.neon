@@ -1,6 +1,7 @@
 parameters:
     level: max
     paths:
+        - example
         - src
         - tests
     tmpDir: var/cache/phpstan

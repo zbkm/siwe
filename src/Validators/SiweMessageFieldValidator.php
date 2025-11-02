@@ -26,14 +26,14 @@ class SiweMessageFieldValidator
         if (!self::addressValidate($params->address)) {
             throw new SiweInvalidMessageFieldException("address", $params->address, [
                 "Address must be a hex value of 20 bytes (40 hex characters).",
-                "Address must match its checksum counterpart."
+                "Address must match its checksum counterpart.",
             ]);
         }
 
         if (!self::chainIdValidate($params->chainId)) {
             throw new SiweInvalidMessageFieldException("chainId", $params->chainId, [
                 "Chain ID must be a EIP-155 chain ID.",
-                "See https://eips.ethereum.org/EIPS/eip-155"
+                "See https://eips.ethereum.org/EIPS/eip-155",
             ]);
         }
 
@@ -41,34 +41,34 @@ class SiweMessageFieldValidator
         if (!self::domainValidate($params->domain)) {
             throw new SiweInvalidMessageFieldException("domain", $params->domain, [
                 "Domain must be an RFC 3986 authority.",
-                "See https://www.rfc-editor.org/rfc/rfc3986"
+                "See https://www.rfc-editor.org/rfc/rfc3986",
             ]);
         }
 
         if (!isset($params->nonce) || !self::nonceValidate($params->nonce)) {
             throw new SiweInvalidMessageFieldException("nonce", $params->nonce, [
                 "Nonce must be at least 8 characters.",
-                "Nonce must be alphanumeric."
+                "Nonce must be alphanumeric.",
             ]);
         }
 
         if (!self::uriValidate($params->uri)) {
             throw new SiweInvalidMessageFieldException("uri", $params->uri, [
                 "URI must be a RFC 3986 URI referring to the resource that is the subject of the signing.",
-                "See https://www.rfc-editor.org/rfc/rfc3986"
+                "See https://www.rfc-editor.org/rfc/rfc3986",
             ]);
         }
 
         if (!isset($params->version) || !self::versionValidate($params->version)) {
             throw new SiweInvalidMessageFieldException("version", $params->version, [
-                "Version must be '1'."
+                "Version must be '1'.",
             ]);
         }
 
         if ($params->scheme && !self::schemeValidate($params->scheme)) {
             throw new SiweInvalidMessageFieldException("scheme", $params->scheme, [
                 "Scheme must be an RFC 3986 URI scheme.",
-                "See https://www.rfc-editor.org/rfc/rfc3986#section-3.1"
+                "See https://www.rfc-editor.org/rfc/rfc3986#section-3.1",
             ]);
         }
 
@@ -83,7 +83,7 @@ class SiweMessageFieldValidator
                 if (!self::resourceValidate($resource)) {
                     throw new SiweInvalidMessageFieldException("resources", $resource, [
                         "Every resource must be a RFC 3986 URI.",
-                        "See https://www.rfc-editor.org/rfc/rfc3986"
+                        "See https://www.rfc-editor.org/rfc/rfc3986",
                     ]);
                 }
             }
@@ -124,7 +124,7 @@ class SiweMessageFieldValidator
     {
         // parse url to handle port
         $domain = parse_url("http://$domain", PHP_URL_HOST);
-        return (bool)filter_var($domain, FILTER_VALIDATE_DOMAIN, FILTER_FLAG_HOSTNAME);
+        return (bool) filter_var($domain, FILTER_VALIDATE_DOMAIN, FILTER_FLAG_HOSTNAME);
     }
 
     /**
@@ -146,7 +146,7 @@ class SiweMessageFieldValidator
      */
     public static function uriValidate(string $uri): bool
     {
-        return (bool)filter_var($uri, FILTER_VALIDATE_URL);
+        return (bool) filter_var($uri, FILTER_VALIDATE_URL);
     }
 
     /**
@@ -168,7 +168,7 @@ class SiweMessageFieldValidator
      */
     public static function schemeValidate(string $scheme): bool
     {
-        return preg_match('/^[a-z][a-z0-9+.-]*$/', strtolower($scheme)) === 1;
+        return preg_match("/^[a-z][a-z0-9+.-]*$/", strtolower($scheme)) === 1;
     }
 
     /**

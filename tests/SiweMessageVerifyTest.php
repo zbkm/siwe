@@ -17,11 +17,11 @@ class SiweMessageVerifyTest extends TestCase
             uri: "https://example.com/path",
             issuedAt: new DateTime("2023-01-31T19:00:00.000Z"),
             nonce: "foobarbaz",
-            version: "1"
+            version: "1",
         );
 
         $this->assertTrue(
-            SiweMessage::verify($message, "0xbcf74ace618c839ca98e02dd56a214656f8ae981dcb0bc5199a9ef76a73a8c642a3d029b2b867a982c2f101c87701b5df129a40dfeee081b3e3bc1fe11a9a5521b")
+            SiweMessage::verify($message, "0xbcf74ace618c839ca98e02dd56a214656f8ae981dcb0bc5199a9ef76a73a8c642a3d029b2b867a982c2f101c87701b5df129a40dfeee081b3e3bc1fe11a9a5521b"),
         );
     }
 
@@ -34,11 +34,11 @@ class SiweMessageVerifyTest extends TestCase
             uri: "https://example.com/path",
             issuedAt: new DateTime("2023-02-01T00:00:00.000Z"),
             nonce: "foobarbaz",
-            version: "1"
+            version: "1",
         );
 
         $this->assertFalse(
-            SiweMessage::verify($message, "0xbcf74ace618c839ca98e02dd56a214656f8ae981dcb0bc5199a9ef76a73a8c642a3d029b2b867a982c2f101c87701b5df129a40dfeee081b3e3bc1fe11a9a5521b")
+            SiweMessage::verify($message, "0xbcf74ace618c839ca98e02dd56a214656f8ae981dcb0bc5199a9ef76a73a8c642a3d029b2b867a982c2f101c87701b5df129a40dfeee081b3e3bc1fe11a9a5521b"),
         );
     }
 }

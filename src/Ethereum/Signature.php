@@ -54,7 +54,7 @@ class Signature
 
         $sign = [
             "r" => substr($signature, 2, 64),
-            "s" => substr($signature, 66, 64)
+            "s" => substr($signature, 66, 64),
         ];
         $v = hexdec(substr($signature, 130, 2)) - 27;
 
@@ -63,7 +63,7 @@ class Signature
         }
 
         /** @var Point $point */
-        $point = (new EC('secp256k1'))->recoverPubKey($hash, $sign, $v);
+        $point = (new EC("secp256k1"))->recoverPubKey($hash, $sign, $v);
 
         /** @var string $pubkey */
         $pubkey = $point->encode("hex");

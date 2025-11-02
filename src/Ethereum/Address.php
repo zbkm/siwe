@@ -25,17 +25,17 @@ class Address
 
     protected static function matchesPattern(string $address): bool
     {
-        return (bool)preg_match('/^(0x)?[0-9a-f]{40}$/i', $address);
+        return (bool) preg_match("/^(0x)?[0-9a-f]{40}$/i", $address);
     }
 
     protected static function isAllSameCaps(string $address): bool
     {
-        return preg_match('/^(0x)?[0-9a-f]{40}$/', $address) || preg_match('/^(0x)?[0-9A-F]{40}$/', $address);
+        return preg_match("/^(0x)?[0-9a-f]{40}$/", $address) || preg_match("/^(0x)?[0-9A-F]{40}$/", $address);
     }
 
     protected static function isValidChecksum(string $address): bool
     {
-        $address = str_replace('0x', '', $address);
+        $address = str_replace("0x", "", $address);
         $hash = Keccak::hash(strtolower($address), 256);
 
         // See: https://github.com/web3j/web3j/pull/134/files#diff-db8702981afff54d3de6a913f13b7be4R42

@@ -6,6 +6,4 @@ namespace Zbkm\Siwe\Exception;
 
 use RuntimeException;
 
-class SignatureException extends RuntimeException
-{
-}
+class SignatureException extends RuntimeException {}

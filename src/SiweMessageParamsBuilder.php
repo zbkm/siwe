@@ -27,9 +27,7 @@ class SiweMessageParamsBuilder
      */
     protected ?array $resources = null;
 
-    protected function __construct()
-    {
-    }
+    protected function __construct() {}
 
     /**
      * @return self
@@ -70,7 +68,7 @@ class SiweMessageParamsBuilder
     }
 
     /**
-     * @param string $statement A human-readable ASCII assertion that the user will sign which MUST NOT include '\n'
+     * @param string $statement A human-readable ASCII assertion that the user will sign which MUST NOT include "\n"
      * @return $this
      */
     public function withStatement(string $statement): self
@@ -177,7 +175,7 @@ class SiweMessageParamsBuilder
      */
     public function build(): SiweMessageParams
     {
-        $requiredFields = ['address', 'chainId', 'domain', 'uri'];
+        $requiredFields = ["address", "chainId", "domain", "uri"];
 
         foreach ($requiredFields as $field) {
             if (!isset($this->$field)) {
@@ -198,7 +196,7 @@ class SiweMessageParamsBuilder
             expirationTime: $this->expirationTime,
             notBefore: $this->notBefore,
             requestId: $this->requestId,
-            resources: $this->resources
+            resources: $this->resources,
         );
     }
 }

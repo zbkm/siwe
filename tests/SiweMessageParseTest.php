@@ -66,7 +66,7 @@ Issued At: 2023-02-01T00:00:00.000Z";
 
         $this->assertEquals(
             "I accept the ExampleOrg Terms of Service: https://example.com/tos",
-            SiweMessage::parse($message)->statement
+            SiweMessage::parse($message)->statement,
         );
     }
 
@@ -84,7 +84,7 @@ Expiration Time: 2022-02-04T00:00:00.000Z";
 
         $this->assertEquals(
             new DateTime("2022-02-04T00:00:00.000Z"),
-            SiweMessage::parse($message)->expirationTime
+            SiweMessage::parse($message)->expirationTime,
         );
     }
 
@@ -102,7 +102,7 @@ Not Before: 2022-02-04T00:00:00.000Z";
 
         $this->assertEquals(
             new DateTime("2022-02-04T00:00:00.000Z"),
-            SiweMessage::parse($message)->notBefore
+            SiweMessage::parse($message)->notBefore,
         );
     }
 
@@ -120,7 +120,7 @@ Request ID: 123e4567-e89b-12d3-a456-426614174000";
 
         $this->assertEquals(
             "123e4567-e89b-12d3-a456-426614174000",
-            SiweMessage::parse($message)->requestId
+            SiweMessage::parse($message)->requestId,
         );
     }
 
@@ -143,9 +143,9 @@ Resources:
             [
                 "https://example.com/foo",
                 "https://example.com/bar",
-                "https://example.com/baz"
+                "https://example.com/baz",
             ],
-            SiweMessage::parse($message)->resources
+            SiweMessage::parse($message)->resources,
         );
     }
 
@@ -162,11 +162,11 @@ Issued At: 2023-02-01T00:00:00.500Z";
 
         $this->assertNotEquals(
             new DateTime("2023-02-01T00:00:00.800Z"),
-            SiweMessage::parse($message)->issuedAt
+            SiweMessage::parse($message)->issuedAt,
         );
         $this->assertEquals(
             new DateTime("2023-02-01T00:00:00.500Z"),
-            SiweMessage::parse($message)->issuedAt
+            SiweMessage::parse($message)->issuedAt,
         );
     }
 }

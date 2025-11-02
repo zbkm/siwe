@@ -37,7 +37,7 @@ class SiweMessageParams
      * @param string             $uri            An RFC 3986 URI referring to the resource that is the subject of the signing (as in the subject of a claim)
      * @param ?DateTimeInterface $issuedAt       The time when the message was generated, typically the current time. Default: now
      * @param ?string            $nonce          A random string typically chosen by the relying party and used to prevent replay attacks, at least 8 alphanumeric characters. Default: random
-     * @param ?string            $statement      A human-readable ASCII assertion that the user will sign which MUST NOT include '\n'
+     * @param ?string            $statement      A human-readable ASCII assertion that the user will sign which MUST NOT include "\n"
      * @param ?string            $version        The current version of the SIWE Message, which MUST be 1 for this specification
      * @param ?string            $scheme         The URI scheme of the origin of the request
      * @param ?DateTimeInterface $expirationTime The time when the signed authentication message is no longer valid
@@ -114,7 +114,7 @@ class SiweMessageParams
             expirationTime: $data["expirationTime"] ?? null,
             notBefore: $data["notBefore"] ?? null,
             requestId: $data["requestId"] ?? null,
-            resources: $data["resources"] ?? null
+            resources: $data["resources"] ?? null,
         );
     }
 

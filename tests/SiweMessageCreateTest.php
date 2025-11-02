@@ -27,7 +27,7 @@ class SiweMessageCreateTest extends TestCase
     {
         // mock time() function
         eval('
-            namespace Zbkm\Siwe; 
+            namespace Zbkm\Siwe;
 
             function time(): int {
                 return 1675209600;
@@ -45,7 +45,7 @@ Version: 1
 Chain ID: 1
 Nonce: foobarbaz
 Issued At: 2023-02-01T00:00:00.000Z",
-            $message
+            $message,
         );
     }
 
@@ -62,7 +62,7 @@ Version: 1
 Chain ID: 1
 Nonce: foobarbaz
 Issued At: 2023-02-01T00:00:00.000Z",
-            $message
+            $message,
         );
 
         $message = SiweMessage::create($this->messageBuilder->withDomain("example.co.uk")->build());
@@ -76,7 +76,7 @@ Version: 1
 Chain ID: 1
 Nonce: foobarbaz
 Issued At: 2023-02-01T00:00:00.000Z",
-            $message
+            $message,
         );
     }
 
@@ -93,7 +93,7 @@ Version: 1
 Chain ID: 1
 Nonce: foobarbaz
 Issued At: 2023-02-01T00:00:00.000Z",
-            $message
+            $message,
         );
     }
 
@@ -101,7 +101,7 @@ Issued At: 2023-02-01T00:00:00.000Z",
     {
         $message = SiweMessage::create(
             $this->messageBuilder
-                ->withStatement("I accept the ExampleOrg Terms of Service: https://example.com/tos")->build()
+                ->withStatement("I accept the ExampleOrg Terms of Service: https://example.com/tos")->build(),
         );
         $this->assertSame(
             "example.com wants you to sign in with your Ethereum account:
@@ -114,7 +114,7 @@ Version: 1
 Chain ID: 1
 Nonce: foobarbaz
 Issued At: 2023-02-01T00:00:00.000Z",
-            $message
+            $message,
         );
     }
 
@@ -135,7 +135,7 @@ Version: 1
 Chain ID: 1
 Nonce: foobarbaz
 Issued At: 2022-02-01T00:00:00.000Z",
-            $message
+            $message,
         );
     }
 
@@ -156,7 +156,7 @@ Chain ID: 1
 Nonce: foobarbaz
 Issued At: 2023-02-01T00:00:00.000Z
 Expiration Time: 2022-02-04T00:00:00.000Z",
-            $message
+            $message,
         );
     }
 
@@ -178,7 +178,7 @@ Chain ID: 1
 Nonce: foobarbaz
 Issued At: 2023-02-01T00:00:00.000Z
 Not Before: 2022-02-04T00:00:00.000Z",
-            $message
+            $message,
         );
     }
 
@@ -187,7 +187,7 @@ Not Before: 2022-02-04T00:00:00.000Z",
         $message = SiweMessage::create(
             $this->messageBuilder
                 ->withRequestId("123e4567-e89b-12d3-a456-426614174000")
-                ->build()
+                ->build(),
         );
 
         $this->assertSame(
@@ -201,7 +201,7 @@ Chain ID: 1
 Nonce: foobarbaz
 Issued At: 2023-02-01T00:00:00.000Z
 Request ID: 123e4567-e89b-12d3-a456-426614174000",
-            $message
+            $message,
         );
     }
 
@@ -227,7 +227,7 @@ Resources:
 - https://example.com/foo
 - https://example.com/bar
 - https://example.com/baz",
-            $message
+            $message,
         );
     }
 

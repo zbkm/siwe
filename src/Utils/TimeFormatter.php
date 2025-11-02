@@ -12,12 +12,12 @@ class TimeFormatter
 {
     public static function datetimeToISO(DateTimeInterface $datetime): string
     {
-        return $datetime->format('Y-m-d\TH:i:s.v\Z');
+        return $datetime->format("Y-m-d\TH:i:s.v\Z");
     }
 
     public static function ISOToDatetime(string $iso): DateTime
     {
-        $time = DateTime::createFromFormat('Y-m-d\TH:i:s.v\Z', $iso);
+        $time = DateTime::createFromFormat("Y-m-d\TH:i:s.v\Z", $iso);
         if ($time === false) {
             throw new SiweTimeException();
         }

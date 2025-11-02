@@ -31,10 +31,10 @@ class SiweMessage
             $message .= "$params->statement\n";
         }
 
-        $message .= "\nURI: " . $params->uri . "\n";
-        $message .= "Version: " . $params->version . "\n";
-        $message .= "Chain ID: " . $params->chainId . "\n";
-        $message .= "Nonce: " . $params->nonce . "\n";
+        $message .= "\nURI: $params->uri\n";
+        $message .= "Version: $params->version\n";
+        $message .= "Chain ID: $params->chainId\n";
+        $message .= "Nonce: $params->nonce\n";
         $message .= "Issued At: " . TimeFormatter::datetimeToISO($params->issuedAt);
 
         if ($params->expirationTime) {
@@ -46,7 +46,7 @@ class SiweMessage
         }
 
         if ($params->requestId) {
-            $message .= "\nRequest ID: " . $params->requestId;
+            $message .= "\nRequest ID: $params->requestId";
         }
 
         if ($params->resources) {
@@ -84,7 +84,7 @@ class SiweMessage
             throw new SiweInvalidMessageException();
         }
 
-        $params["chainId"] = (int)$params["chainId"];
+        $params["chainId"] = (int) $params["chainId"];
 
         if (array_key_exists("expirationTime", $params)) {
             $params["expirationTime"] = TimeFormatter::ISOToDatetime($params["expirationTime"]);

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Zbkm\Siwe\Ethereum;
@@ -15,7 +16,7 @@ class Signature
     /**
      * Ethereum personal_sign prefix from eip-191
      */
-    const MESSAGE_PREFIX = "\x19Ethereum Signed Message:\n";
+    public const MESSAGE_PREFIX = "\x19Ethereum Signed Message:\n";
 
     /**
      * Verify personal sign message

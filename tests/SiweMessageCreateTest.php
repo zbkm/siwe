@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 use Zbkm\Siwe\Exception\SiweInvalidMessageFieldException;
@@ -10,7 +11,7 @@ class SiweMessageCreateTest extends TestCase
 {
     protected SiweMessageParamsBuilder $messageBuilder;
 
-    function setUp(): void
+    public function setUp(): void
     {
         $this->messageBuilder = SiweMessageParamsBuilder::create()
             ->withAddress('0xA0Cf798816D4b9b9866b5330EEa46a18382f251e')
@@ -34,7 +35,8 @@ class SiweMessageCreateTest extends TestCase
         ');
 
         $message = SiweMessage::create($this->messageBuilder->build());
-        $this->assertSame("example.com wants you to sign in with your Ethereum account:
+        $this->assertSame(
+            "example.com wants you to sign in with your Ethereum account:
 0xA0Cf798816D4b9b9866b5330EEa46a18382f251e
 
 
@@ -43,13 +45,15 @@ Version: 1
 Chain ID: 1
 Nonce: foobarbaz
 Issued At: 2023-02-01T00:00:00.000Z",
-            $message);
+            $message
+        );
     }
 
     public function testCreateWithDomain()
     {
         $message = SiweMessage::create($this->messageBuilder->withDomain("foo.example.com")->build());
-        $this->assertSame("foo.example.com wants you to sign in with your Ethereum account:
+        $this->assertSame(
+            "foo.example.com wants you to sign in with your Ethereum account:
 0xA0Cf798816D4b9b9866b5330EEa46a18382f251e
 
 
@@ -58,10 +62,12 @@ Version: 1
 Chain ID: 1
 Nonce: foobarbaz
 Issued At: 2023-02-01T00:00:00.000Z",
-            $message);
+            $message
+        );
 
         $message = SiweMessage::create($this->messageBuilder->withDomain("example.co.uk")->build());
-        $this->assertSame("example.co.uk wants you to sign in with your Ethereum account:
+        $this->assertSame(
+            "example.co.uk wants you to sign in with your Ethereum account:
 0xA0Cf798816D4b9b9866b5330EEa46a18382f251e
 
 
@@ -70,13 +76,15 @@ Version: 1
 Chain ID: 1
 Nonce: foobarbaz
 Issued At: 2023-02-01T00:00:00.000Z",
-            $message);
+            $message
+        );
     }
 
     public function testCreateWithScheme()
     {
         $message = SiweMessage::create($this->messageBuilder->withScheme("https")->build());
-        $this->assertSame("https://example.com wants you to sign in with your Ethereum account:
+        $this->assertSame(
+            "https://example.com wants you to sign in with your Ethereum account:
 0xA0Cf798816D4b9b9866b5330EEa46a18382f251e
 
 
@@ -85,7 +93,8 @@ Version: 1
 Chain ID: 1
 Nonce: foobarbaz
 Issued At: 2023-02-01T00:00:00.000Z",
-            $message);
+            $message
+        );
     }
 
     public function testCreateWithStatement()
@@ -94,7 +103,8 @@ Issued At: 2023-02-01T00:00:00.000Z",
             $this->messageBuilder
                 ->withStatement("I accept the ExampleOrg Terms of Service: https://example.com/tos")->build()
         );
-        $this->assertSame("example.com wants you to sign in with your Ethereum account:
+        $this->assertSame(
+            "example.com wants you to sign in with your Ethereum account:
 0xA0Cf798816D4b9b9866b5330EEa46a18382f251e
 
 I accept the ExampleOrg Terms of Service: https://example.com/tos
@@ -104,7 +114,8 @@ Version: 1
 Chain ID: 1
 Nonce: foobarbaz
 Issued At: 2023-02-01T00:00:00.000Z",
-            $message);
+            $message
+        );
     }
 
     public function testCreateWithIssuedAt()
@@ -114,7 +125,8 @@ Issued At: 2023-02-01T00:00:00.000Z",
             ->messageBuilder
             ->withIssuedAt((new DateTime())->setDate(2022, 2, 1)->setTime(0, 0))
             ->build());
-        $this->assertSame("example.com wants you to sign in with your Ethereum account:
+        $this->assertSame(
+            "example.com wants you to sign in with your Ethereum account:
 0xA0Cf798816D4b9b9866b5330EEa46a18382f251e
 
 
@@ -123,7 +135,8 @@ Version: 1
 Chain ID: 1
 Nonce: foobarbaz
 Issued At: 2022-02-01T00:00:00.000Z",
-            $message);
+            $message
+        );
     }
 
     public function testCreateWithExpirationTime()
@@ -132,7 +145,8 @@ Issued At: 2022-02-01T00:00:00.000Z",
             ->messageBuilder
             ->withExpirationTime((new DateTime())->setDate(2022, 2, 4)->setTime(0, 0))
             ->build());
-        $this->assertSame("example.com wants you to sign in with your Ethereum account:
+        $this->assertSame(
+            "example.com wants you to sign in with your Ethereum account:
 0xA0Cf798816D4b9b9866b5330EEa46a18382f251e
 
 
@@ -142,7 +156,8 @@ Chain ID: 1
 Nonce: foobarbaz
 Issued At: 2023-02-01T00:00:00.000Z
 Expiration Time: 2022-02-04T00:00:00.000Z",
-            $message);
+            $message
+        );
     }
 
     public function testCreateWithNotBefore()
@@ -152,7 +167,8 @@ Expiration Time: 2022-02-04T00:00:00.000Z",
             ->withNotBefore((new DateTime())->setDate(2022, 2, 4)->setTime(0, 0))
             ->build());
 
-        $this->assertSame("example.com wants you to sign in with your Ethereum account:
+        $this->assertSame(
+            "example.com wants you to sign in with your Ethereum account:
 0xA0Cf798816D4b9b9866b5330EEa46a18382f251e
 
 
@@ -162,7 +178,8 @@ Chain ID: 1
 Nonce: foobarbaz
 Issued At: 2023-02-01T00:00:00.000Z
 Not Before: 2022-02-04T00:00:00.000Z",
-            $message);
+            $message
+        );
     }
 
     public function testCreateWithRequestId()
@@ -173,7 +190,8 @@ Not Before: 2022-02-04T00:00:00.000Z",
                 ->build()
         );
 
-        $this->assertSame("example.com wants you to sign in with your Ethereum account:
+        $this->assertSame(
+            "example.com wants you to sign in with your Ethereum account:
 0xA0Cf798816D4b9b9866b5330EEa46a18382f251e
 
 
@@ -183,7 +201,8 @@ Chain ID: 1
 Nonce: foobarbaz
 Issued At: 2023-02-01T00:00:00.000Z
 Request ID: 123e4567-e89b-12d3-a456-426614174000",
-            $message);
+            $message
+        );
     }
 
     public function testCreateWithResources()
@@ -194,7 +213,8 @@ Request ID: 123e4567-e89b-12d3-a456-426614174000",
             "https://example.com/baz",
         ])->build());
 
-        $this->assertSame("example.com wants you to sign in with your Ethereum account:
+        $this->assertSame(
+            "example.com wants you to sign in with your Ethereum account:
 0xA0Cf798816D4b9b9866b5330EEa46a18382f251e
 
 
@@ -207,7 +227,8 @@ Resources:
 - https://example.com/foo
 - https://example.com/bar
 - https://example.com/baz",
-            $message);
+            $message
+        );
     }
 
     public function testExceptCreateWithInvalidAddress()

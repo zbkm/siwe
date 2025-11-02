@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 use Zbkm\Siwe\SiweMessage;
@@ -79,4 +80,3 @@ switch ($_GET["action"] ?? "") {
         echo json_encode(["status" => "error", "message" => "Invalid action"]);
         break;
 }
-

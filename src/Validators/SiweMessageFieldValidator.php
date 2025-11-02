@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Zbkm\Siwe\Validators;
@@ -12,7 +13,7 @@ class SiweMessageFieldValidator
     /**
      * Minimum length considering eip-4361
      */
-    const MIN_NONCE_LENGTH = 8;
+    public const MIN_NONCE_LENGTH = 8;
 
     /**
      * Validate SiweMessageParams or except if there is an error in params

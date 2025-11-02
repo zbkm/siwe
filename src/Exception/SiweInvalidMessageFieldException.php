@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Zbkm\Siwe\Exception;
@@ -14,8 +15,7 @@ class SiweInvalidMessageFieldException extends RuntimeException
         string          $field,
         string|int $value,
         array           $conditions,
-    )
-    {
+    ) {
         $message = "Invalid Sign-In with Ethereum message field \"$field\".\n";
         foreach ($conditions as $condition) {
             $message .= "\n- $condition";

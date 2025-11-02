@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Zbkm\Siwe;
@@ -10,7 +11,7 @@ use Zbkm\Siwe\Validators\SiweMessageFieldValidator;
 
 class SiweMessageParams
 {
-    const DEFAULT_VERSION = "1";
+    public const DEFAULT_VERSION = "1";
 
     /**
      * @param string                 $address        The Ethereum address performing the signing
@@ -42,8 +43,7 @@ class SiweMessageParams
         public ?DateTimeInterface $notBefore = null,
         public ?string            $requestId = null,
         public ?array             $resources = null,
-    )
-    {
+    ) {
         if ($this->issuedAt === null) {
             $this->issuedAt = new DateTime();
         }

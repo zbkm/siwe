@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Zbkm\Siwe\Ethereum;
@@ -8,7 +9,7 @@ use kornrunner\Keccak;
 class Address
 {
     // address check from https://stackoverflow.com/questions/44990408/how-to-validate-ethereum-addresses-in-php
-    static public function isAddress(string $address, bool $strict = false): bool
+    public static function isAddress(string $address, bool $strict = false): bool
     {
         // See: https://github.com/ethereum/web3.js/blob/7935e5f/lib/utils/utils.js#L415
         if (self::matchesPattern($address)) {
@@ -22,17 +23,17 @@ class Address
         return false;
     }
 
-    static protected function matchesPattern(string $address): int
+    protected static function matchesPattern(string $address): int
     {
         return preg_match('/^(0x)?[0-9a-f]{40}$/i', $address);
     }
 
-    static protected function isAllSameCaps(string $address): bool
+    protected static function isAllSameCaps(string $address): bool
     {
         return preg_match('/^(0x)?[0-9a-f]{40}$/', $address) || preg_match('/^(0x)?[0-9A-F]{40}$/', $address);
     }
 
-    static protected function isValidChecksum($address)
+    protected static function isValidChecksum($address): bool
     {
         $address = str_replace('0x', '', $address);
         $hash = Keccak::hash(strtolower($address), 256);

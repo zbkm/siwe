@@ -4,7 +4,9 @@
   "type": "library",
   "license": "MIT",
   "scripts": {
-    "tests": "phpunit tests"
+    "tests": "phpunit tests",
+    "format": "php-cs-fixer fix  . --dry-run --verbose --using-cache=no",
+    "format:fix": "php-cs-fixer fix  ."
   },
   "autoload": {
     "psr-4": {
@@ -18,7 +20,8 @@
     }
   ],
   "require-dev": {
-    "phpunit/phpunit": "11"
+    "phpunit/phpunit": "11",
+    "friendsofphp/php-cs-fixer": "^3.75"
   },
   "require": {
     "kornrunner/keccak": "^1.0",

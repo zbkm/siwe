@@ -23,9 +23,9 @@ class Address
         return false;
     }
 
-    protected static function matchesPattern(string $address): int
+    protected static function matchesPattern(string $address): bool
     {
-        return preg_match('/^(0x)?[0-9a-f]{40}$/i', $address);
+        return (bool)preg_match('/^(0x)?[0-9a-f]{40}$/i', $address);
     }
 
     protected static function isAllSameCaps(string $address): bool
@@ -33,7 +33,7 @@ class Address
         return preg_match('/^(0x)?[0-9a-f]{40}$/', $address) || preg_match('/^(0x)?[0-9A-F]{40}$/', $address);
     }
 
-    protected static function isValidChecksum($address): bool
+    protected static function isValidChecksum(string $address): bool
     {
         $address = str_replace('0x', '', $address);
         $hash = Keccak::hash(strtolower($address), 256);

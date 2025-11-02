@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace Zbkm\Siwe;
 
 use Exception;
+use Random\RandomException;
 use Zbkm\Siwe\Ethereum\Signature;
 use Zbkm\Siwe\Exception\SignatureException;
+use Zbkm\Siwe\Exception\SiweInvalidMessageException;
 use Zbkm\Siwe\Exception\SiweTimeException;
 use Zbkm\Siwe\Utils\TimeFormatter;
 use Zbkm\Siwe\Validators\SiweMessageTimeValidator;
@@ -62,15 +64,27 @@ class SiweMessage
      *
      * @param string $message
      * @return SiweMessageParams
+     * @throws RandomException
      */
     public static function parse(string $message): SiweMessageParams
     {
         // regex from https://github.com/wevm/viem/blob/main/src/utils/siwe/parseSiweMessage.ts
         $re = "/^(?:(?P<scheme>[a-zA-Z][a-zA-Z0-9+-.]*):\/\/)?(?P<domain>[a-zA-Z0-9+-.]*(?::[0-9]{1,5})?) (?:wants you to sign in with your Ethereum account:\n)(?P<address>0x[a-fA-F0-9]{40})\n\n(?:(?P<statement>.*)\n\n)?(?:URI: (?P<uri>.+))\n(?:Version: (?P<version>.+))\n(?:Chain ID: (?P<chainId>\d+))\n(?:Nonce: (?P<nonce>[a-zA-Z0-9]+))\n(?:Issued At: (?P<issuedAt>.+))(?:\nExpiration Time: (?P<expirationTime>.+))?(?:\nNot Before: (?P<notBefore>.+))?(?:\nRequest ID: (?P<requestId>.+))?/m";
 
-        preg_match($re, $message, $params);
-        $params["chainId"] = (int)$params["chainId"];
+        $preg = preg_match($re, $message, $params);
         $params = array_filter($params);
+
+        if (
+            $preg === false || $preg === 0
+            || !array_key_exists("address", $params)
+            || !array_key_exists("domain", $params)
+            || !array_key_exists("chainId", $params)
+            || !array_key_exists("uri", $params)
+        ) {
+            throw new SiweInvalidMessageException();
+        }
+
+        $params["chainId"] = (int)$params["chainId"];
 
         if (array_key_exists("expirationTime", $params)) {
             $params["expirationTime"] = TimeFormatter::ISOToDatetime($params["expirationTime"]);

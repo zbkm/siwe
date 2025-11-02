@@ -12,49 +12,68 @@ use Zbkm\Siwe\Validators\SiweMessageFieldValidator;
 class SiweMessageParams
 {
     public const DEFAULT_VERSION = "1";
+    public string $address;
+    public int $chainId;
+    public string $domain;
+    public string $uri;
+    public DateTimeInterface $issuedAt;
+    public string $nonce;
+    public ?string $statement;
+    public ?string $version;
+    public ?string $scheme;
+    public ?DateTimeInterface $expirationTime;
+    public ?DateTimeInterface $notBefore;
+    public ?string $requestId;
+    /**
+     * @var string[]
+     */
+    public ?array $resources;
+
 
     /**
-     * @param string                 $address        The Ethereum address performing the signing
-     * @param int                    $chainId        Chain ID (1 for Ethereum)
-     * @param string                 $domain         The domain that is requesting the signing
-     * @param string                 $uri            An RFC 3986 URI referring to the resource that is the subject of the signing (as in the subject of a claim)
-     * @param DateTimeInterface|null $issuedAt       The time when the message was generated, typically the current time. Default: now
-     * @param string|null            $nonce          A random string typically chosen by the relying party and used to prevent replay attacks, at least 8 alphanumeric characters. Default: random
-     * @param string|null            $statement      A human-readable ASCII assertion that the user will sign which MUST NOT include '\n'
-     * @param string|null            $version        The current version of the SIWE Message, which MUST be 1 for this specification
-     * @param string|null            $scheme         The URI scheme of the origin of the request
-     * @param DateTimeInterface|null $expirationTime The time when the signed authentication message is no longer valid
-     * @param DateTimeInterface|null $notBefore      The time when the signed authentication message will become valid
-     * @param string|null            $requestId      A system-specific identifier that MAY be used to uniquely refer to the sign-in request
-     * @param string[]|null          $resources      A list of information or references to information the user wishes to have resolved as part of authentication by the relying party
+     * @param string             $address        The Ethereum address performing the signing
+     * @param int                $chainId        Chain ID (1 for Ethereum)
+     * @param string             $domain         The domain that is requesting the signing
+     * @param string             $uri            An RFC 3986 URI referring to the resource that is the subject of the signing (as in the subject of a claim)
+     * @param ?DateTimeInterface $issuedAt       The time when the message was generated, typically the current time. Default: now
+     * @param ?string            $nonce          A random string typically chosen by the relying party and used to prevent replay attacks, at least 8 alphanumeric characters. Default: random
+     * @param ?string            $statement      A human-readable ASCII assertion that the user will sign which MUST NOT include '\n'
+     * @param ?string            $version        The current version of the SIWE Message, which MUST be 1 for this specification
+     * @param ?string            $scheme         The URI scheme of the origin of the request
+     * @param ?DateTimeInterface $expirationTime The time when the signed authentication message is no longer valid
+     * @param ?DateTimeInterface $notBefore      The time when the signed authentication message will become valid
+     * @param ?string            $requestId      A system-specific identifier that MAY be used to uniquely refer to the sign-in request
+     * @param ?string[]          $resources      A list of information or references to information the user wishes to have resolved as part of authentication by the relying party
      * @throws RandomException
      */
     public function __construct(
-        public string             $address,
-        public int                $chainId,
-        public string             $domain,
-        public string             $uri,
-        public ?DateTimeInterface $issuedAt = null,
-        public ?string            $nonce = null,
-        public ?string            $statement = null,
-        public ?string            $version = null,
-        public ?string            $scheme = null,
-        public ?DateTimeInterface $expirationTime = null,
-        public ?DateTimeInterface $notBefore = null,
-        public ?string            $requestId = null,
-        public ?array             $resources = null,
+        string             $address,
+        int                $chainId,
+        string             $domain,
+        string             $uri,
+        ?DateTimeInterface $issuedAt = null,
+        ?string            $nonce = null,
+        ?string            $statement = null,
+        ?string            $version = null,
+        ?string            $scheme = null,
+        ?DateTimeInterface $expirationTime = null,
+        ?DateTimeInterface $notBefore = null,
+        ?string            $requestId = null,
+        ?array             $resources = null,
     ) {
-        if ($this->issuedAt === null) {
-            $this->issuedAt = new DateTime();
-        }
-
-        if ($this->nonce === null) {
-            $this->nonce = NonceManager::generate();
-        }
-
-        if ($this->version === null) {
-            $this->version = self::DEFAULT_VERSION;
-        }
+        $this->address = $address;
+        $this->chainId = $chainId;
+        $this->domain = $domain;
+        $this->uri = $uri;
+        $this->issuedAt = $issuedAt ?? new DateTime();
+        $this->nonce = $nonce ?? NonceManager::generate();
+        $this->statement = $statement;
+        $this->version = $version ?? self::DEFAULT_VERSION;
+        $this->scheme = $scheme;
+        $this->expirationTime = $expirationTime;
+        $this->notBefore = $notBefore;
+        $this->requestId = $requestId;
+        $this->resources = $resources;
 
         $this->validate();
     }
@@ -78,6 +97,7 @@ class SiweMessageParams
      *      resources?: string[]
      *     } $data
      * @return SiweMessageParams
+     * @throws RandomException
      */
     public static function fromArray(array $data): self
     {

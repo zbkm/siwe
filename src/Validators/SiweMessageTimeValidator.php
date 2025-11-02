@@ -33,7 +33,7 @@ class SiweMessageTimeValidator
     /**
      * Validate notBefore time
      *
-     * @param int $notBefore
+     * @param DateTimeInterface $notBefore
      * @return bool
      */
     public static function notBeforeValidate(DateTimeInterface $notBefore): bool
@@ -44,7 +44,7 @@ class SiweMessageTimeValidator
     /**
      * Validate expiration time
      *
-     * @param int $expirationTime
+     * @param DateTimeInterface $expirationTime
      * @return bool
      */
     public static function expirationTimeValidate(DateTimeInterface $expirationTime): bool

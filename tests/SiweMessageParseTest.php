@@ -10,7 +10,7 @@ use Zbkm\Siwe\SiweMessageParams;
 
 class SiweMessageParseTest extends TestCase
 {
-    public function testParseDefault()
+    public function testParseDefault(): void
     {
         $message = "example.com wants you to sign in with your Ethereum account:
 0xA0Cf798816D4b9b9866b5330EEa46a18382f251e
@@ -37,7 +37,7 @@ Issued At: 2023-02-01T00:00:00.000Z";
         $this->assertEquals($result, SiweMessage::parse($message));
     }
 
-    public function testParseWithDomainPort()
+    public function testParseWithDomainPort(): void
     {
         $message = "example.com:8080 wants you to sign in with your Ethereum account:
 0xA0Cf798816D4b9b9866b5330EEa46a18382f251e
@@ -51,7 +51,7 @@ Issued At: 2023-02-01T00:00:00.000Z";
         $this->assertEquals("example.com:8080", SiweMessage::parse($message)->domain);
     }
 
-    public function testParseWithStatement()
+    public function testParseWithStatement(): void
     {
         $message = "example.com wants you to sign in with your Ethereum account:
 0xA0Cf798816D4b9b9866b5330EEa46a18382f251e
@@ -70,7 +70,7 @@ Issued At: 2023-02-01T00:00:00.000Z";
         );
     }
 
-    public function testParseWithExpirationTime()
+    public function testParseWithExpirationTime(): void
     {
         $message = "https://example.com wants you to sign in with your Ethereum account:
 0xA0Cf798816D4b9b9866b5330EEa46a18382f251e
@@ -88,7 +88,7 @@ Expiration Time: 2022-02-04T00:00:00.000Z";
         );
     }
 
-    public function testParseWithNotBefore()
+    public function testParseWithNotBefore(): void
     {
         $message = "https://example.com wants you to sign in with your Ethereum account:
 0xA0Cf798816D4b9b9866b5330EEa46a18382f251e
@@ -106,7 +106,7 @@ Not Before: 2022-02-04T00:00:00.000Z";
         );
     }
 
-    public function testParseWithRequestId()
+    public function testParseWithRequestId(): void
     {
         $message = "https://example.com wants you to sign in with your Ethereum account:
 0xA0Cf798816D4b9b9866b5330EEa46a18382f251e
@@ -124,7 +124,7 @@ Request ID: 123e4567-e89b-12d3-a456-426614174000";
         );
     }
 
-    public function testParseWithResources()
+    public function testParseWithResources(): void
     {
         $message = "https://example.com wants you to sign in with your Ethereum account:
 0xA0Cf798816D4b9b9866b5330EEa46a18382f251e
@@ -149,7 +149,7 @@ Resources:
         );
     }
 
-    public function testParseWithTimeMilliseconds()
+    public function testParseWithTimeMilliseconds(): void
     {
         $message = "https://example.com wants you to sign in with your Ethereum account:
 0xA0Cf798816D4b9b9866b5330EEa46a18382f251e

@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Zbkm\Siwe\Ethereum;
 
+use Elliptic\Curve\BaseCurve\Point;
 use Elliptic\EC;
+use Exception;
 use kornrunner\Keccak;
 use Zbkm\Siwe\Exception\SignatureException;
 
@@ -26,6 +28,7 @@ class Signature
      * @param $address   string Signer address
      * @return bool
      * @throws SignatureException
+     * @throws Exception
      */
     public static function verifyMessage(string $message, string $signature, string $address): bool
     {
@@ -43,6 +46,7 @@ class Signature
      * @param string $signature Signature
      * @return string
      * @throws SignatureException
+     * @throws Exception
      */
     public static function ecrecover(string $message, string $signature): string
     {
@@ -58,11 +62,13 @@ class Signature
             throw new SignatureException("v can only be 27 or 28");
         }
 
-        return self::pubKeyToAddress(
-            (new EC('secp256k1'))
-                ->recoverPubKey($hash, $sign, $v)
-                ->encode("hex")
-        );
+        /** @var Point $point */
+        $point = (new EC('secp256k1'))->recoverPubKey($hash, $sign, $v);
+
+        /** @var string $pubkey */
+        $pubkey = $point->encode("hex");
+
+        return self::pubKeyToAddress($pubkey);
     }
 
     /**
@@ -70,10 +76,11 @@ class Signature
      *
      * @param string $pubkey
      * @return string
-     * @throws \Exception
+     * @throws Exception
      */
     protected static function pubKeyToAddress(string $pubkey): string
     {
+        // @phpstan-ignore-next-line EC will definitely return the pubkey in hex format
         return "0x" . substr(Keccak::hash(substr(hex2bin($pubkey), 1), 256), 24);
     }
 }

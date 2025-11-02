@@ -45,7 +45,7 @@ class SiweMessageFieldValidator
             ]);
         }
 
-        if (!self::nonceValidate($params->nonce)) {
+        if (!isset($params->nonce) || !self::nonceValidate($params->nonce)) {
             throw new SiweInvalidMessageFieldException("nonce", $params->nonce, [
                 "Nonce must be at least 8 characters.",
                 "Nonce must be alphanumeric."
@@ -59,7 +59,7 @@ class SiweMessageFieldValidator
             ]);
         }
 
-        if (!self::versionValidate($params->version)) {
+        if (!isset($params->version) || !self::versionValidate($params->version)) {
             throw new SiweInvalidMessageFieldException("version", $params->version, [
                 "Version must be '1'."
             ]);
@@ -111,7 +111,7 @@ class SiweMessageFieldValidator
      */
     public static function chainIdValidate(int $chainId): bool
     {
-        return $chainId > 0 and gettype($chainId) === "integer";
+        return $chainId > 0;
     }
 
     /**

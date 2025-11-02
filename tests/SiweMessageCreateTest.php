@@ -23,7 +23,7 @@ class SiweMessageCreateTest extends TestCase
             ->withVersion('1');
     }
 
-    public function testCreateDefault()
+    public function testCreateDefault(): void
     {
         // mock time() function
         eval('
@@ -49,7 +49,7 @@ Issued At: 2023-02-01T00:00:00.000Z",
         );
     }
 
-    public function testCreateWithDomain()
+    public function testCreateWithDomain(): void
     {
         $message = SiweMessage::create($this->messageBuilder->withDomain("foo.example.com")->build());
         $this->assertSame(
@@ -80,7 +80,7 @@ Issued At: 2023-02-01T00:00:00.000Z",
         );
     }
 
-    public function testCreateWithScheme()
+    public function testCreateWithScheme(): void
     {
         $message = SiweMessage::create($this->messageBuilder->withScheme("https")->build());
         $this->assertSame(
@@ -97,7 +97,7 @@ Issued At: 2023-02-01T00:00:00.000Z",
         );
     }
 
-    public function testCreateWithStatement()
+    public function testCreateWithStatement(): void
     {
         $message = SiweMessage::create(
             $this->messageBuilder
@@ -118,7 +118,7 @@ Issued At: 2023-02-01T00:00:00.000Z",
         );
     }
 
-    public function testCreateWithIssuedAt()
+    public function testCreateWithIssuedAt(): void
     {
 
         $message = SiweMessage::create($this
@@ -139,7 +139,7 @@ Issued At: 2022-02-01T00:00:00.000Z",
         );
     }
 
-    public function testCreateWithExpirationTime()
+    public function testCreateWithExpirationTime(): void
     {
         $message = SiweMessage::create($this
             ->messageBuilder
@@ -160,7 +160,7 @@ Expiration Time: 2022-02-04T00:00:00.000Z",
         );
     }
 
-    public function testCreateWithNotBefore()
+    public function testCreateWithNotBefore(): void
     {
         $message = SiweMessage::create($this
             ->messageBuilder
@@ -182,7 +182,7 @@ Not Before: 2022-02-04T00:00:00.000Z",
         );
     }
 
-    public function testCreateWithRequestId()
+    public function testCreateWithRequestId(): void
     {
         $message = SiweMessage::create(
             $this->messageBuilder
@@ -205,7 +205,7 @@ Request ID: 123e4567-e89b-12d3-a456-426614174000",
         );
     }
 
-    public function testCreateWithResources()
+    public function testCreateWithResources(): void
     {
         $message = SiweMessage::create($this->messageBuilder->withResources([
             "https://example.com/foo",
@@ -231,7 +231,7 @@ Resources:
         );
     }
 
-    public function testExceptCreateWithInvalidAddress()
+    public function testExceptCreateWithInvalidAddress(): void
     {
         $this->expectException(SiweInvalidMessageFieldException::class);
         $this->expectExceptionMessage("Invalid Sign-In with Ethereum message field \"address\".
@@ -244,7 +244,7 @@ Provided value: 0xfoobarbaz");
 
     }
 
-    public function testExceptCreateWithInvalidChainId()
+    public function testExceptCreateWithInvalidChainId(): void
     {
         $this->expectException(SiweInvalidMessageFieldException::class);
         $this->expectExceptionMessage("Invalid Sign-In with Ethereum message field \"chainId\".
@@ -256,7 +256,7 @@ Provided value: -5");
         SiweMessage::create($this->messageBuilder->withChainId(-5)->build());
     }
 
-    public function testExceptCreateWithInvalidDomain()
+    public function testExceptCreateWithInvalidDomain(): void
     {
         $this->expectException(SiweInvalidMessageFieldException::class);
         $this->expectExceptionMessage("Invalid Sign-In with Ethereum message field \"domain\".
@@ -268,7 +268,7 @@ Provided value: #foo");
         SiweMessage::create($this->messageBuilder->withDomain("#foo")->build());
     }
 
-    public function testExceptCreateWithInvalidNonce()
+    public function testExceptCreateWithInvalidNonce(): void
     {
         $this->expectException(SiweInvalidMessageFieldException::class);
         $this->expectExceptionMessage("Invalid Sign-In with Ethereum message field \"nonce\".
@@ -280,7 +280,7 @@ Provided value: #foo");
         SiweMessage::create($this->messageBuilder->withNonce("#foo")->build());
     }
 
-    public function testExceptCreateWithInvalidUri()
+    public function testExceptCreateWithInvalidUri(): void
     {
         $this->expectException(SiweInvalidMessageFieldException::class);
         $this->expectExceptionMessage("Invalid Sign-In with Ethereum message field \"uri\".
@@ -292,7 +292,7 @@ Provided value: #foo");
         SiweMessage::create($this->messageBuilder->withUri("#foo")->build());
     }
 
-    public function testExceptCreateWithInvalidVersion()
+    public function testExceptCreateWithInvalidVersion(): void
     {
         $this->expectException(SiweInvalidMessageFieldException::class);
         $this->expectExceptionMessage("Invalid Sign-In with Ethereum message field \"version\".
@@ -303,7 +303,7 @@ Provided value: 2");
         SiweMessage::create($this->messageBuilder->withVersion("2")->build());
     }
 
-    public function testExceptCreateWithInvalidScheme()
+    public function testExceptCreateWithInvalidScheme(): void
     {
         $this->expectException(SiweInvalidMessageFieldException::class);
         $this->expectExceptionMessage("Invalid Sign-In with Ethereum message field \"scheme\".
@@ -315,7 +315,7 @@ Provided value: foo_bar");
         SiweMessage::create($this->messageBuilder->withScheme("foo_bar")->build());
     }
 
-    public function testExceptCreateWithInvalidStatement()
+    public function testExceptCreateWithInvalidStatement(): void
     {
         $this->expectException(SiweInvalidMessageFieldException::class);
         $this->expectExceptionMessage("Invalid Sign-In with Ethereum message field \"statement\".
@@ -327,7 +327,7 @@ bar");
         SiweMessage::create($this->messageBuilder->withStatement("foo\nbar")->build());
     }
 
-    public function testExceptCreateWithInvalidResource()
+    public function testExceptCreateWithInvalidResource(): void
     {
         $this->expectException(SiweInvalidMessageFieldException::class);
         $this->expectExceptionMessage("Invalid Sign-In with Ethereum message field \"resources\".

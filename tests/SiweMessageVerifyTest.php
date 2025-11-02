@@ -8,7 +8,7 @@ use Zbkm\Siwe\SiweMessageParams;
 
 class SiweMessageVerifyTest extends TestCase
 {
-    public function testVerifyDefault()
+    public function testVerifyDefault(): void
     {
         $message = new SiweMessageParams(
             address: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
@@ -25,7 +25,7 @@ class SiweMessageVerifyTest extends TestCase
         );
     }
 
-    public function testVerifyInvalidMessageFields()
+    public function testVerifyInvalidMessageFields(): void
     {
         $message = new SiweMessageParams(
             address: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",

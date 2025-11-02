@@ -9,11 +9,16 @@ use RuntimeException;
 class SiweInvalidMessageFieldException extends RuntimeException
 {
     protected string $field;
-    protected string|int $value;
+    protected string|int|null $value;
 
+    /**
+     * @param string          $field
+     * @param string|int|null $value
+     * @param string[]        $conditions
+     */
     public function __construct(
         string          $field,
-        string|int $value,
+        string|int|null $value,
         array           $conditions,
     ) {
         $message = "Invalid Sign-In with Ethereum message field \"$field\".\n";
@@ -32,7 +37,7 @@ class SiweInvalidMessageFieldException extends RuntimeException
         return $this->field;
     }
 
-    public function getValue(): string|int
+    public function getValue(): string|int|null
     {
         return $this->value;
     }

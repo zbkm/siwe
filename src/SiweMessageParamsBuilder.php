@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Zbkm\Siwe;
 
 use DateTimeInterface;
+use Random\RandomException;
 use Zbkm\Siwe\Exception\SiweInvalidMessageFieldException;
 
 class SiweMessageParamsBuilder
@@ -21,6 +22,9 @@ class SiweMessageParamsBuilder
     protected ?string $nonce = null;
     protected string $uri;
     protected ?string $version = null;
+    /**
+     * @var string[]|null
+     */
     protected ?array $resources = null;
 
     protected function __construct()
@@ -156,7 +160,7 @@ class SiweMessageParamsBuilder
     }
 
     /**
-     * @param array $resources A list of information or references to information the user wishes to have resolved as part of authentication by the relying party
+     * @param string[] $resources A list of information or references to information the user wishes to have resolved as part of authentication by the relying party
      * @return $this
      */
     public function withResources(array $resources): self
@@ -169,7 +173,7 @@ class SiweMessageParamsBuilder
      * Create Params for transfers to SiweMessage class
      *
      * @return SiweMessageParams
-     * @throws \Random\RandomException
+     * @throws RandomException
      */
     public function build(): SiweMessageParams
     {

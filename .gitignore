@@ -4,5 +4,5 @@ vendor
 # ide
 .idea
 
-# php cs fixer
-.php-cs-fixer.cache
+# cache
+var

@@ -1,0 +1,35 @@
+name: pipeline
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        php: [8.2, 8.3, 8.4]
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: install php
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: ctype, gmp
+          coverage: xdebug
+
+      - name: install composer deps
+        run: composer install --no-progress --no-interaction
+
+      - name: tests
+        run: composer tests
+
+      - name: php-cs-fixer
+        run: composer format
+
+      - name: phpstan
+        run: composer check

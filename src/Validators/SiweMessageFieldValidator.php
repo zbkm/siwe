@@ -8,6 +8,10 @@ use Zbkm\Siwe\Ethereum\Address;
 use Zbkm\Siwe\Exception\SiweInvalidMessageFieldException;
 use Zbkm\Siwe\SiweMessageParams;
 
+/**
+ * SiweMessageFieldValidator
+ * @description validator for siwe message fields
+ */
 class SiweMessageFieldValidator
 {
     /**
@@ -123,7 +127,7 @@ class SiweMessageFieldValidator
     public static function domainValidate(string $domain): bool
     {
         // parse url to handle port
-        $domain = parse_url("http://$domain", PHP_URL_HOST);
+        $domain = parse_url("https://$domain", PHP_URL_HOST);
         return (bool) filter_var($domain, FILTER_VALIDATE_DOMAIN, FILTER_FLAG_HOSTNAME);
     }
 

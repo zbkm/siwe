@@ -6,6 +6,9 @@ namespace Zbkm\Siwe;
 
 use Random\RandomException;
 
+/**
+ * NonceManager
+ */
 class NonceManager
 {
     /**

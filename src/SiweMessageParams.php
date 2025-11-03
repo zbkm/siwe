@@ -9,6 +9,10 @@ use DateTimeInterface;
 use Random\RandomException;
 use Zbkm\Siwe\Validators\SiweMessageFieldValidator;
 
+/**
+ * SiweMessageParams
+ * @description fields representation in siwe message
+ */
 class SiweMessageParams
 {
     public const DEFAULT_VERSION = "1";

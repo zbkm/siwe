@@ -6,4 +6,7 @@ namespace Zbkm\Siwe\Exception;
 
 use RuntimeException;
 
+/**
+ * SiweInvalidMessageException
+ */
 class SiweInvalidMessageException extends RuntimeException {}

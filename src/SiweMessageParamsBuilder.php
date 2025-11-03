@@ -8,6 +8,11 @@ use DateTimeInterface;
 use Random\RandomException;
 use Zbkm\Siwe\Exception\SiweInvalidMessageFieldException;
 
+/**
+ * SiweMessageParamsBuilder
+ *
+ * @description builder for SiweMessageParams
+ */
 class SiweMessageParamsBuilder
 {
     protected string $address;
@@ -30,6 +35,8 @@ class SiweMessageParamsBuilder
     protected function __construct() {}
 
     /**
+     * Create builder instance
+     *
      * @return self
      */
     public static function create(): self
@@ -128,7 +135,8 @@ class SiweMessageParamsBuilder
     }
 
     /**
-     * @param string $nonce A random string typically chosen by the relying party and used to prevent replay attacks, at least 8 alphanumeric characters
+     * @param string $nonce A random string typically chosen by the relying party and used to prevent replay attacks,
+     *                      at least 8 alphanumeric characters
      * @return $this
      */
     public function withNonce(string $nonce): self
@@ -138,7 +146,8 @@ class SiweMessageParamsBuilder
     }
 
     /**
-     * @param string $uri An RFC 3986 URI referring to the resource that is the subject of the signing (as in the subject of a claim)
+     * @param string $uri An RFC 3986 URI referring to the resource that is the subject of the signing (as in the
+     *                    subject of a claim)
      * @return $this
      */
     public function withUri(string $uri): self
@@ -158,7 +167,8 @@ class SiweMessageParamsBuilder
     }
 
     /**
-     * @param string[] $resources A list of information or references to information the user wishes to have resolved as part of authentication by the relying party
+     * @param string[] $resources A list of information or references to information the user wishes to have resolved
+     *                            as part of authentication by the relying party
      * @return $this
      */
     public function withResources(array $resources): self

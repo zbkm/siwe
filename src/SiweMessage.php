@@ -13,6 +13,9 @@ use Zbkm\Siwe\Exception\SiweTimeException;
 use Zbkm\Siwe\Utils\TimeFormatter;
 use Zbkm\Siwe\Validators\SiweMessageTimeValidator;
 
+/**
+ * SiweMessage
+ */
 class SiweMessage
 {
     /**

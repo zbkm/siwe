@@ -9,6 +9,10 @@ use DateTimeInterface;
 use Zbkm\Siwe\Exception\SiweTimeException;
 use Zbkm\Siwe\SiweMessageParams;
 
+/**
+ * SiweMessageTimeValidator
+ * @description validator for time fields in siwe message
+ */
 class SiweMessageTimeValidator
 {
     /**

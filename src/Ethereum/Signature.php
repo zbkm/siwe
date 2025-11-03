@@ -28,7 +28,6 @@ class Signature
      * @param $address   string Signer address
      * @return bool
      * @throws SignatureException
-     * @throws Exception
      */
     public static function verifyMessage(string $message, string $signature, string $address): bool
     {
@@ -46,7 +45,6 @@ class Signature
      * @param string $signature Signature
      * @return string
      * @throws SignatureException
-     * @throws Exception
      */
     public static function ecrecover(string $message, string $signature): string
     {
@@ -76,7 +74,7 @@ class Signature
      *
      * @param string $pubkey
      * @return string
-     * @throws Exception
+     * @throws void
      */
     protected static function pubKeyToAddress(string $pubkey): string
     {

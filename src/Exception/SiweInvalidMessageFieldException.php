@@ -6,15 +6,18 @@ namespace Zbkm\Siwe\Exception;
 
 use RuntimeException;
 
+/**
+ * SiweInvalidMessageFieldException
+ */
 class SiweInvalidMessageFieldException extends RuntimeException
 {
     protected string $field;
     protected string|int|null $value;
 
     /**
-     * @param string          $field
-     * @param string|int|null $value
-     * @param string[]        $conditions
+     * @param string          $field field name
+     * @param string|int|null $value field value
+     * @param string[]        $conditions unmet conditions
      */
     public function __construct(
         string          $field,
@@ -32,11 +35,21 @@ class SiweInvalidMessageFieldException extends RuntimeException
         $this->value = $value;
     }
 
+    /**
+     * Get invalid message field name
+     *
+     * @return string
+     */
     public function getField(): string
     {
         return $this->field;
     }
 
+    /**
+     * Get invalid message field value
+     *
+     * @return string|int|null
+     */
     public function getValue(): string|int|null
     {
         return $this->value;

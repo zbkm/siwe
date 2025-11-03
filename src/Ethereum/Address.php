@@ -6,9 +6,20 @@ namespace Zbkm\Siwe\Ethereum;
 
 use kornrunner\Keccak;
 
+/**
+ * Address
+ * @description Helper for checking Ethereum addresses
+ * @dev https://stackoverflow.com/questions/44990408/how-to-validate-ethereum-addresses-in-php
+ */
 class Address
 {
-    // address check from https://stackoverflow.com/questions/44990408/how-to-validate-ethereum-addresses-in-php
+    /**
+     * Check if a string is an Ethereum address
+     *
+     * @param string $address
+     * @param bool   $strict strict mode (check checksum)
+     * @return bool
+     */
     public static function isAddress(string $address, bool $strict = false): bool
     {
         // See: https://github.com/ethereum/web3.js/blob/7935e5f/lib/utils/utils.js#L415
@@ -23,16 +34,35 @@ class Address
         return false;
     }
 
+    /**
+     * Checking if a string matches an Ethereum address pattern
+     *
+     * @param string $address wallet address
+     * @return bool
+     */
     protected static function matchesPattern(string $address): bool
     {
         return (bool) preg_match("/^(0x)?[0-9a-f]{40}$/i", $address);
     }
 
+    /**
+     * Check if all letters in an address are uppercase or lowercase
+     *
+     * @param string $address wallet address
+     * @return bool
+     */
     protected static function isAllSameCaps(string $address): bool
     {
         return preg_match("/^(0x)?[0-9a-f]{40}$/", $address) || preg_match("/^(0x)?[0-9A-F]{40}$/", $address);
     }
 
+    /**
+     * Validate checksum for ethereum address string
+     *
+     * @param string $address
+     * @return bool
+     * @throws void
+     */
     protected static function isValidChecksum(string $address): bool
     {
         $address = str_replace("0x", "", $address);

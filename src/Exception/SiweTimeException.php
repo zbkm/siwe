@@ -6,4 +6,7 @@ namespace Zbkm\Siwe\Exception;
 
 use RuntimeException;
 
+/**
+ * SiweTimeException
+ */
 class SiweTimeException extends RuntimeException {}

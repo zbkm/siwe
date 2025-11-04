@@ -79,6 +79,5 @@ switch ($_GET["action"] ?? "") {
 // based on the nonce) and the signature.
 // $params = SiweMessage::parse($_POST["message"]);
 // and verify to validate of the data received
-// $params->nonce === $_SESSION["nonce"]
-// && $params->domain === "example.com"
+// SiweMessage::validate($params, ["nonce" => $_SESSION["nonce"], "site" => $_SERVER["HTTP_HOST"]])
 // && SiweMessage::verify($params, $_POST["signature"])

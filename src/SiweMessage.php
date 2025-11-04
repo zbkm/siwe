@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Zbkm\Siwe;
 
 use Exception;
-use Random\RandomException;
 use Zbkm\Siwe\Ethereum\Signature;
 use Zbkm\Siwe\Exception\SignatureException;
 use Zbkm\Siwe\Exception\SiweInvalidMessageException;
 use Zbkm\Siwe\Exception\SiweTimeException;
+use Zbkm\Siwe\Exception\SiweValidateException;
 use Zbkm\Siwe\Utils\TimeFormatter;
 use Zbkm\Siwe\Validators\SiweMessageTimeValidator;
 
@@ -67,7 +67,7 @@ class SiweMessage
      *
      * @param string $message
      * @return SiweMessageParams
-     * @throws RandomException
+     * @throws SiweInvalidMessageException|SiweTimeException
      */
     public static function parse(string $message): SiweMessageParams
     {
@@ -83,18 +83,18 @@ class SiweMessage
             || !array_key_exists("domain", $params)
             || !array_key_exists("chainId", $params)
             || !array_key_exists("uri", $params)
+            || !array_key_exists("version", $params)
+            || !array_key_exists("nonce", $params)
+            || !array_key_exists("issuedAt", $params)
         ) {
             throw new SiweInvalidMessageException();
         }
 
         $params["chainId"] = (int) $params["chainId"];
+        $params["issuedAt"] = TimeFormatter::ISOToDatetime($params["issuedAt"]);
 
         if (array_key_exists("expirationTime", $params)) {
             $params["expirationTime"] = TimeFormatter::ISOToDatetime($params["expirationTime"]);
-        }
-
-        if (array_key_exists("issuedAt", $params)) {
-            $params["issuedAt"] = TimeFormatter::ISOToDatetime($params["issuedAt"]);
         }
 
         if (array_key_exists("notBefore", $params)) {
@@ -163,5 +163,58 @@ class SiweMessage
         }
 
         throw new SignatureException("Signature invalid");
+    }
+
+    /**
+     * Validate SIWE message with values from the array
+     *
+     * @description Checks that all fields and values from the excepted array are included in the SIWE message.
+     * @param SiweMessageParams     $params SIWE message params
+     * @param array<string, string> $data   Array with expected values
+     * @return bool
+     */
+    public static function validate(SiweMessageParams $params, array $data): bool
+    {
+        try {
+            self::validateOrFail($params, $data);
+            return true;
+        } catch (SiweValidateException) {
+            return false;
+        }
+    }
+
+    /**
+     * Validate SIWE message string with values from the array
+     *
+     * @description Checks that all fields and values from the excepted array are included in the SIWE message.
+     * @param string                $message SIWE message string
+     * @param array<string, string> $data    Array with expected values
+     * @return bool
+     */
+    public static function validateMessage(string $message, array $data): bool
+    {
+        return self::validate(self::parse($message), $data);
+    }
+
+    /**
+     * Validate SIWE message with values from the array or except
+     *
+     * @description Checks that all fields and values from the excepted array are included in the SIWE message.
+     * @param SiweMessageParams     $params SIWE message params
+     * @param array<string, string> $data   Array with expected values
+     * @return bool
+     * @throws SiweValidateException
+     */
+    public static function validateOrFail(SiweMessageParams $params, array $data): bool
+    {
+        foreach ($data as $key => $value) {
+            /** @var string|null $providedValue */
+            $providedValue = $params->{$key} ?? null;
+            if (!property_exists($params, $key) || $providedValue !== $value) {
+                throw new SiweValidateException($key, $providedValue, $value);
+            }
+        }
+
+        return true;
     }
 }

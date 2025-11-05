@@ -73,20 +73,25 @@ class SiweMessage
     {
         // regex from https://github.com/wevm/viem/blob/main/src/utils/siwe/parseSiweMessage.ts
         $re = "/^(?:(?P<scheme>[a-zA-Z][a-zA-Z0-9+-.]*):\/\/)?(?P<domain>[a-zA-Z0-9+-.]*(?::[0-9]{1,5})?) (?:wants you to sign in with your Ethereum account:\n)(?P<address>0x[a-fA-F0-9]{40})\n\n(?:(?P<statement>.*)\n\n)?(?:URI: (?P<uri>.+))\n(?:Version: (?P<version>.+))\n(?:Chain ID: (?P<chainId>\d+))\n(?:Nonce: (?P<nonce>[a-zA-Z0-9]+))\n(?:Issued At: (?P<issuedAt>.+))(?:\nExpiration Time: (?P<expirationTime>.+))?(?:\nNot Before: (?P<notBefore>.+))?(?:\nRequest ID: (?P<requestId>.+))?/m";
-
         $preg = preg_match($re, $message, $params);
+
+        /** @var array{
+         * address: string,
+         * chainId: string,
+         * domain: string,
+         * uri: string,
+         * issuedAt: string,
+         * nonce?: string,
+         * statement?: string,
+         * version?: string,
+         * scheme?: string,
+         * expirationTime?: string,
+         * notBefore?: string,
+         * requestId?: string
+         * } $params */
         $params = array_filter($params);
 
-        if (
-            $preg === false || $preg === 0
-            || !array_key_exists("address", $params)
-            || !array_key_exists("domain", $params)
-            || !array_key_exists("chainId", $params)
-            || !array_key_exists("uri", $params)
-            || !array_key_exists("version", $params)
-            || !array_key_exists("nonce", $params)
-            || !array_key_exists("issuedAt", $params)
-        ) {
+        if (!$preg) {
             throw new SiweInvalidMessageException();
         }
 
